@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Supaya bisa dipasang di layar utama HP seperti aplikasi -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Tagihan PB">
+  <meta name="theme-color" content="#2f7d5b">
+  <title>Tagihan Papan Bunga</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Bagian atas: judul dan menu -->
+  <header class="atas">
+    <h1>Tagihan Papan Bunga</h1>
+    <nav class="tab">
+      <button type="button" data-tab="dashboard" class="aktif">Dashboard</button>
+      <button type="button" data-tab="pesanan">Pesanan</button>
+      <button type="button" data-tab="pelanggan">Pelanggan</button>
+      <button type="button" data-tab="pengaturan">Pengaturan</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ===== DASHBOARD ===== -->
+    <section id="tab-dashboard" class="halaman aktif">
+      <div id="info-toko" class="info" hidden>Isi data toko dan nomor rekening dulu di menu Pengaturan.</div>
+
+      <div class="filter">
+        <label>Bulan pesan
+          <input type="month" id="f-bulan">
+        </label>
+        <label>Status bayar
+          <select id="f-status">
+            <option value="">Semua</option>
+            <option>Belum Bayar</option>
+            <option>DP</option>
+            <option>Lunas</option>
+          </select>
+        </label>
+        <label>Jenis pelanggan
+          <select id="f-jenis">
+            <option value="">Semua</option>
+            <option>Perorangan</option>
+            <option>Perusahaan</option>
+            <option>Langganan</option>
+          </select>
+        </label>
+        <div class="filter-tombol">
+          <button type="button" class="btn" id="btn-reset-filter">Hapus Filter</button>
+        </div>
+      </div>
+
+      <div class="kartu-angka" id="statistik"></div>
+
+      <div class="baris-tombol">
+        <button type="button" class="btn wa" id="btn-tagih-semua">Tagih Semua yang Telat</button>
+        <button type="button" class="btn utama" id="btn-tambah-pesanan-2">+ Tambah Pesanan</button>
+      </div>
+
+      <h2>Lewat jatuh tempo</h2>
+      <div id="list-telat"></div>
+
+      <h2>Jatuh tempo dalam 3 hari</h2>
+      <div id="list-dekat"></div>
+
+      <h2>Pesanan sesuai filter</h2>
+      <div id="list-filter"></div>
+    </section>
+
+    <!-- ===== PESANAN ===== -->
+    <section id="tab-pesanan" class="halaman">
+      <div class="baris-tombol">
+        <button type="button" class="btn utama" id="btn-tambah-pesanan">+ Tambah Pesanan</button>
+      </div>
+      <div class="filter">
+        <label>Cari
+          <input type="search" id="cari-pesanan" placeholder="Nama, nomor pesanan, ucapan">
+        </label>
+        <label>Status pengerjaan
+          <select id="f-kerja">
+            <option value="">Semua</option>
+            <option>Dipesan</option>
+            <option>Dikerjakan</option>
+            <option>Dikirim</option>
+            <option>Selesai</option>
+          </select>
+        </label>
+      </div>
+      <div id="list-pesanan" class="jarak-atas"></div>
+    </section>
+
+    <!-- ===== PELANGGAN ===== -->
+    <section id="tab-pelanggan" class="halaman">
+      <div class="baris-tombol">
+        <button type="button" class="btn utama" id="btn-tambah-pelanggan">+ Tambah Pelanggan</button>
+      </div>
+      <div class="filter">
+        <label>Cari
+          <input type="search" id="cari-pelanggan" placeholder="Nama atau perusahaan">
+        </label>
+      </div>
+      <div id="list-pelanggan" class="jarak-atas"></div>
+    </section>
+
+    <!-- ===== PENGATURAN ===== -->
+    <section id="tab-pengaturan" class="halaman">
+      <form id="form-toko" class="kotak">
+        <h2>Data Toko</h2>
+        <label>Nama toko
+          <input id="s-nama" required>
+        </label>
+        <label>Alamat toko
+          <textarea id="s-alamat" rows="2"></textarea>
+        </label>
+        <label>Nomor WhatsApp toko
+          <input id="s-wa" inputmode="tel" placeholder="08xxx atau 628xxx">
+        </label>
+        <label>Nomor rekening
+          <textarea id="s-rekening" rows="2" placeholder="BCA 1234567890 a.n. Nama Pemilik"></textarea>
+        </label>
+        <h3>Jatuh tempo bawaan (hari setelah kirim)</h3>
+        <div class="grid3">
+          <label>Perorangan <input id="s-tempo-Perorangan" type="number" min="0" inputmode="numeric"></label>
+          <label>Perusahaan <input id="s-tempo-Perusahaan" type="number" min="0" inputmode="numeric"></label>
+          <label>Langganan <input id="s-tempo-Langganan" type="number" min="0" inputmode="numeric"></label>
+        </div>
+        <button type="submit" class="btn utama">Simpan Data Toko</button>
+      </form>
+
+      <div class="kotak">
+        <h2>Template Pesan</h2>
+        <p class="kecil">Kata di dalam kurung kurawal diganti otomatis:
+          {nama}, {no_pesanan}, {acara}, {tanggal_acara}, {total}, {sisa},
+          {jatuh_tempo}, {hari_telat}, {rekening}, {nama_toko}</p>
+        <div id="area-template"></div>
+        <div class="baris-tombol">
+          <button type="button" class="btn utama" id="btn-simpan-template">Simpan Template</button>
+          <button type="button" class="btn" id="btn-reset-template">Kembalikan Template Bawaan</button>
+        </div>
+      </div>
+
+      <div class="kotak">
+        <h2>Cadangan Data</h2>
+        <p class="kecil">Data hanya tersimpan di browser perangkat ini. Ekspor secara rutin supaya tidak hilang.</p>
+        <div class="baris-tombol">
+          <button type="button" class="btn" id="btn-ekspor-json">Ekspor JSON</button>
+          <button type="button" class="btn" id="btn-impor-json">Impor JSON</button>
+          <button type="button" class="btn" id="btn-ekspor-csv">Ekspor CSV (Excel)</button>
+        </div>
+        <input type="file" id="file-impor" accept=".json,application/json" hidden>
+      </div>
+    </section>
+  </main>
+
+  <!-- Jendela pop-up untuk form dan detail -->
+  <div id="modal" class="modal" hidden>
+    <div class="modal-isi" role="dialog" aria-modal="true">
+      <button type="button" class="btn kecil tutup" data-aksi="tutup">Tutup</button>
+      <div id="modal-badan"></div>
+    </div>
+  </div>
+
+  <!-- Tempat invoice saat dicetak (tidak terlihat di layar) -->
+  <div id="cetak"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
